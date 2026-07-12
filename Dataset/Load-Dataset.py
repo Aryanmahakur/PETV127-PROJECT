@@ -24,3 +24,31 @@ except Exception as e:
     print(f"❌ Could not load kidney.csv: {e}")
 
 print("--------------------------------")
+
+import pandas as pd
+
+print("--- Checking Dataset Columns ---")
+
+# 1. Diabetes
+diabetes_df = pd.read_csv(
+    r"C:\Users\ARYAN MAHAKUR\Downloads\archive (1)\diabetes.csv"
+)
+print("🔹 DIABETES COLUMNS:")
+print(list(diabetes_df.columns))
+print("-" * 30)
+
+# 2. Heart Disease
+heart_df = pd.read_csv(
+    r"C:\Users\ARYAN MAHAKUR\Downloads\archive (2)\heart.csv"
+)
+print("🔹 HEART DISEASE COLUMNS:")
+print(list(heart_df.columns))
+print("-" * 30)
+
+# 3. Kidney Disease
+kidney_df = pd.read_csv(
+    r"C:\Users\ARYAN MAHAKUR\Downloads\archive (3)\new_model.csv"
+)
+print("🔹 KIDNEY DISEASE COLUMNS:")
+print(list(kidney_df.columns))
+print("--------------------------------")
