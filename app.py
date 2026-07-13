@@ -100,8 +100,10 @@ st.markdown(
         div[data-testid="stMetricLabel"],
         div[data-testid="stMetricValue"],
         div[data-testid="stMetricValue"] > div,
-        button[data-baseweb="tab"] p,
-        .stTabs button p {
+        button[data-baseweb="tab"],
+        button[data-baseweb="tab"] *,
+        .stTabs button,
+        .stTabs button * {
             color: #0f172a !important;
             -webkit-text-fill-color: #0f172a !important;
         }
