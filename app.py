@@ -48,26 +48,30 @@ NAV_STEPS = [
     ("RESULTS", "Health Report"),
     ("ANALYTICS", "Clinical Breakdown")
 ]
-
 # ==============================================================================
-# 2. THEME / STYLING
+# 2. THEME / STYLING & ADVANCED ANIMATIONS
 # ==============================================================================
 st.markdown(
     """
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-        /* ---------- Core Reset & Excess Space Removal ---------- */
+        /* ---------- Core Reset & Enhanced Visibility Animated Heart Backdrop ---------- */
         html, body, .stApp { 
             font-family: 'Inter', sans-serif !important; 
-            background: #f8fafc !important; 
+            background-color: #f8fafc !important; 
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800" preserveAspectRatio="none"><path d="M0,400 L450,400 L480,300 L520,550 L560,350 L590,440 L630,400 L1440,400" fill="none" stroke="%230284c7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.12" stroke-dasharray="1500" stroke-dashoffset="1500"><animate attributeName="stroke-dashoffset" values="1500;0" dur="4.5s" repeatCount="indefinite"/></path></svg>') !important;
+            background-repeat: no-repeat !important;
+            background-position: center center !important;
+            background-size: cover !important;
+            background-attachment: fixed !important;
         }
 
         div[data-testid="stAppViewBlockContainer"], 
         div[data-testid="stMainBlockContainer"], 
         .main .block-container {
-            padding-top: 0.5rem !important;
-            padding-bottom: 2rem !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 3.5rem !important;
             margin-top: 0px !important;
         }
 
@@ -76,11 +80,52 @@ st.markdown(
             height: 2.5rem !important;
         }
 
-        .stMarkdown p, label p {
+        /* ---------- TEXT VISIBILITY & CONTRAST PRODUCTION FIX ---------- */
+        label[data-testid="stWidgetLabel"] p, 
+        .stTextInput label p, 
+        .stNumberInput label p, 
+        .stSelectbox label p,
+        .main label,
+        .main p,
+        .stMarkdown p {
             color: #0f172a !important;
+            font-weight: 500 !important;
+            font-size: 0.88rem !important;
+            line-height: 1.5;
         }
 
-        /* ---------- Sidebar Contrast Fix ---------- */
+        /* ---------- FIXED METRIC LABELS & UNSELECTED TABS CONTRAST ---------- */
+        div[data-testid="stMetric"] div, 
+        div[data-testid="stMetric"] label,
+        div[data-testid="stMetricLabel"],
+        div[data-testid="stMetricValue"],
+        div[data-testid="stMetricValue"] > div,
+        button[data-baseweb="tab"] p,
+        .stTabs button p {
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+        }
+
+        .section-header {
+            font-size: 1.35rem !important;
+            font-weight: 700 !important; 
+            color: #1e3a8a !important;
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.25rem !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-intro-text {
+            color: #475569 !important;
+            font-size: 0.92rem !important;
+            font-weight: 400 !important;
+            margin-bottom: 1.5rem !important;
+            line-height: 1.6 !important;
+        }
+
+        /* ---------- Sidebar Contrast ---------- */
         section[data-testid="stSidebar"] {
             background-color: #0f172a !important; 
         }
@@ -96,39 +141,34 @@ st.markdown(
             color: #cbd5e1 !important; 
         }
 
-        /* ---------- Input Component Visibility Fix ---------- */
+        /* ---------- Input Controls Layout ---------- */
         div[data-baseweb="input"], div[data-baseweb="select"], .stTextArea textarea {
             background-color: #ffffff !important;
             border: 1px solid #cbd5e1 !important;
-            border-radius: 8px !important;
+            border-radius: 4px !important;
         }
         
         div[data-baseweb="input"] input, div[data-baseweb="select"] div {
             color: #0f172a !important;
             background-color: #ffffff !important;
             -webkit-text-fill-color: #0f172a !important;
+            font-size: 0.88rem !important;
         }
 
-        .stTextInput label p, .stNumberInput label p, .stSelectbox label p {
-            color: #0f172a !important;
-            font-weight: 500 !important;
-        }
-
-        /* ---------- Progress Tracker Header Navigation Bar ---------- */
+        /* ---------- Navigation Bar ---------- */
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.85rem 1.5rem;
+            padding: 0.75rem 1.25rem;
             background: #ffffff !important; 
-            border-radius: 12px;
+            border-radius: 8px;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 1px 3px rgba(15,23,42,0.03);
+            box-shadow: 0 1px 3px rgba(15,23,42,0.02);
             margin-bottom: 2rem;
-            margin-top: 0px !important;
         }
         .nav-logo { 
-            font-size: 1.25rem; 
+            font-size: 1.15rem; 
             font-weight: 800; 
             color: #0284c7 !important; 
             display: flex; 
@@ -136,181 +176,218 @@ st.markdown(
             gap: 0.1rem; 
             letter-spacing: -0.02em;
         }
-        .nav-logo-dot {
-            color: #1e3a8a !important; 
-        }
-        .nav-tracker {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-size: 0.85rem;
-            font-weight: 400;
-        }
-        .nav-step {
-            padding: 0.2rem 0.6rem;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-            color: #475569 !important;
-        }
-        .nav-step.active {
-            font-weight: 600;
-            color: #0284c7 !important; 
-            background-color: #f0f9ff;
-        }
-        .nav-arrow {
-            color: #cbd5e1 !important;
-            font-size: 0.75rem;
-        }
+        .nav-logo-dot { color: #1e3a8a !important; }
+        .nav-tracker { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+        .nav-step { padding: 0.2rem 0.5rem; border-radius: 4px; color: #475569 !important; }
+        .nav-step.active { font-weight: 600 !important; color: #0284c7 !important; background-color: #f0f9ff; }
+        .nav-arrow { color: #cbd5e1 !important; font-size: 0.75rem; }
 
-        /* ---------- Typography ---------- */
+        /* ---------- Hero Headings & Typography ---------- */
         .hero-title { 
-            font-size: 2.4rem; 
+            font-size: 2rem; 
             font-weight: 800; 
             color: #1e3a8a !important; 
-            line-height: 1.2; 
-            margin-bottom: 0.75rem; 
+            line-height: 1.3; 
+            margin-top: 0.5rem;
+            margin-bottom: 1.25rem; 
             letter-spacing: -0.02em;
         }
         
         .attention-banner {
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border-left: 5px solid #0284c7;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.06);
+            border-left: 4px solid #0284c7;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem; 
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04);
         }
         .attention-banner p {
-            font-size: 1.2rem !important;
+            font-size: 0.95rem !important;
             color: #1e3a8a !important;
-            font-weight: 600 !important;
+            font-weight: 500 !important;
             line-height: 1.5 !important;
             margin: 0 !important;
         }
         
         .hero-subtitle { 
-            font-size: 1.15rem; 
+            font-size: 1.05rem; 
             color: #475569 !important; 
             font-weight: 400;
-            margin-bottom: 1.5rem; 
-            line-height: 1.6; 
+            margin-top: 0.25rem; 
+            margin-bottom: 1.75rem; 
+            line-height: 1.5; 
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.35rem;
         }
 
-        /* ---------- 1-Second Smooth Word Rotator Animation Styling ---------- */
-        .dynamic-text-wrapper {
-            display: inline-block;
+        .dynamic-text-scroll-container {
+            display: inline-flex;
+            overflow: hidden;
+            vertical-align: bottom;
+            height: 1.6rem; 
+        }
+
+        .dynamic-text-scroll-box {
+            display: flex;
+            flex-direction: column;
             font-weight: 700;
             color: #0284c7 !important;
-            vertical-align: bottom;
-            min-width: 120px;
-        }
-        .dynamic-text-wrapper::after {
-            content: "clinicians";
-            animation: wordScroll 3s infinite ease-in-out;
-        }
-        @keyframes wordScroll {
-            0%, 30.33% { content: "clinicians"; }
-            33.33%, 63.66% { content: "patients"; }
-            66.66%, 100% { content: "everyone"; }
-        }
-        
-        h3, .section-header {
-            font-weight: 400 !important; 
-            letter-spacing: 0.02em;
-            color: #1e3a8a !important;
-            margin-bottom: 1rem;
+            animation: textDropMove 6s infinite ease-in-out;
         }
 
+        .dynamic-text-item { height: 1.6rem; line-height: 1.6rem; }
+
+        @keyframes textDropMove {
+            0%, 25% { transform: translateY(0); }
+            33%, 58% { transform: translateY(-1.6rem); }
+            66%, 91% { transform: translateY(-3.2rem); }
+            100% { transform: translateY(0); }
+        }
+        
         .badge {
             display: inline-block; 
             background: #e0f2fe; 
             color: #0369a1 !important; 
             font-size: 0.7rem;
             font-weight: 600; 
-            padding: 0.25rem 0.75rem; 
+            padding: 0.25rem 0.6rem; 
             border-radius: 999px; 
             margin-bottom: 0.75rem;
             letter-spacing: 0.05em; 
             text-transform: uppercase;
         }
 
-        /* ---------- Structural Cards & Layout Elements ---------- */
-        .card {
-            background: #ffffff; 
-            padding: 1.5rem; 
-            border-radius: 14px;
-            border: 1px solid #e2e8f0; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
-            margin-bottom: 1.25rem; 
-            height: 100%;
+        /* ---------- Right Cards Animations ---------- */
+        .right-animation-wrapper {
+            animation: entryFromRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) both;
         }
-        .pipeline-card { 
-            border-top: 3px solid #0284c7; 
-        }
-        .pipeline-card h4 { 
-            margin: 0 0 0.4rem 0; 
-            color: #1e3a8a !important; 
-            font-weight: 600;
-        }
-        .pipeline-card p { 
-            color: #475569 !important; 
-            font-size: 0.88rem; 
-            font-weight: 400;
-            margin: 0; 
+        
+        @keyframes entryFromRight {
+            from { opacity: 0; transform: translateX(45px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        .info-box {
+        .card {
             background: #ffffff; 
+            padding: 1.25rem 1.5rem; 
+            border-radius: 8px;
             border: 1px solid #e2e8f0; 
-            border-radius: 10px;
-            padding: 0.9rem 1.1rem; 
-            font-size: 0.88rem; 
-            color: #475569 !important; 
-            margin-bottom: 1.25rem;
-            font-weight: 400;
-            line-height: 1.5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+            margin-bottom: 1rem; 
         }
+        .pipeline-card { border-top: 4px solid #0284c7; }
+        .pipeline-card h4 { margin: 0 0 0.5rem 0; color: #1e3a8a !important; font-weight: 600; font-size: 1.05rem; }
+        .pipeline-card p { color: #475569 !important; font-size: 0.85rem; line-height: 1.5; margin: 0; }
+        
+        .result-banner {
+            padding: 1.25rem 1.5rem; 
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+        }
+
         .warn-box {
             background: #fffbeb; 
             border: 1px solid #fde68a; 
-            border-radius: 10px;
-            padding: 0.85rem 1.1rem; 
+            border-radius: 4px;
+            padding: 0.6rem 1rem; 
             font-size: 0.85rem; 
-            color: #92400e !important; 
             margin: 0.5rem 0;
         }
-        .disclaimer {
+
+        /* ---------- Scroll Down Note Areas ---------- */
+        .delayed-load-disclaimer {
             background: #f1f5f9; 
-            border-left: 3px solid #94a3b8; 
+            border-left: 4px solid #94a3b8; 
             border-radius: 6px;
-            padding: 0.8rem 1rem; 
+            padding: 0.85rem 1.15rem; 
             font-size: 0.8rem; 
             color: #475569 !important; 
-            margin-top: 2rem;
-            font-weight: 400;
+            margin-top: 15rem !important; 
+            line-height: 1.5;
+            opacity: 0;
+            animation: slowFadeAppearance 0.8s ease-out 0.6s both;
         }
 
-        /* ---------- Interactive Buttons ---------- */
-        div.stButton > button {
-            background-color: #0284c7 !important; 
-            color: white !important;
-            font-weight: 500 !important;
-            padding: 0.55rem 1.8rem !important;
-            border-radius: 8px !important;
-            border: none !important;
-            box-shadow: 0 2px 4px rgba(2, 132, 199, 0.15) !important;
-            transition: all 0.15s ease;
+        .secondary-note-para {
+            color: #64748b !important;
+            font-size: 0.78rem !important;
+            margin-top: 0.6rem !important;
+            line-height: 1.4;
+            padding-left: 0.25rem;
         }
-        div.stButton > button:hover { 
-            background-color: #0369a1 !important; 
-            transform: translateY(-1px); 
-        }
-
-        .metric-reason { 
+        
+        .disclaimer {
+            background: #f1f5f9; 
+            border-left: 4px solid #94a3b8; 
+            border-radius: 6px;
+            padding: 0.75rem 1rem; 
             font-size: 0.78rem; 
             color: #475569 !important; 
-            margin-top: -0.5rem; 
-            font-weight: 400;
+            margin-top: 2rem;
+            line-height: 1.5;
+        }
+
+        @keyframes slowFadeAppearance {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---------- CUSTOM GEOMETRIC RECTANGLE BUTTONS CORNER-TO-CORNER STRETCH ---------- */
+        div.stButton > button {
+            background-color: #0284c7 !important; 
+            color: #ffffff !important; 
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            padding: 0.75rem 0.5rem !important;
+            border-radius: 4px !important; 
+            border: none !important;
+            box-shadow: 0 4px 10px rgba(2, 132, 199, 0.12) !important;
+            letter-spacing: 0.02em !important;
+            transition: all 0.25s cubic-bezier(0.075, 0.82, 0.165, 1) !important;
+            width: 100% !important; 
+            display: block !important;
+        }
+        div.stButton > button p {
+            color: #ffffff !important; 
+        }
+        div.stButton > button:hover {
+            background-color: #0369a1 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.22) !important;
+        }
+
+        /* ---------- RECTANGULAR BLACK DOWNLOAD BUTTON EQUALIZER ---------- */
+        div[data-testid="stDownloadButton"] > button {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            padding: 0.75rem 2.5rem !important;
+            border-radius: 4px !important; 
+            border: none !important;
+            min-height: 43px !important; 
+            height: 100% !important;
+            width: 100% !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12) !important;
+            letter-spacing: 0.02em !important;
+            transition: all 0.25s cubic-bezier(0.075, 0.82, 0.165, 1) !important;
+        }
+        div[data-testid="stDownloadButton"] > button:hover {
+            background-color: #1e293b !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.22) !important;
+        }
+
+        /* ---------- VERTICAL COMPONENT BLOCK MARGIN REDUCTION ---------- */
+        div[data-testid="stVerticalBlock"] > div {
+            margin-bottom: 0.35rem !important;
+            padding-bottom: 0px !important;
         }
     </style>
     """,
@@ -437,30 +514,46 @@ if st.session_state.step == "LANDING":
             unsafe_allow_html=True,
         )
 
-        # Dynamic text rotator component added seamlessly into the layout description
         st.markdown(
-            "<div class='hero-subtitle'>The checkup dashboard made by technology for "
-            "<span class='dynamic-text-wrapper'></span></div>",
+            "<div class='hero-subtitle'>"
+            "<span>The checkup dashboard made by technology for </span>"
+            "<div class='dynamic-text-scroll-container'>"
+                "<div class='dynamic-text-scroll-box'>"
+                    "<span class='dynamic-text-item'>clinicians</span>"
+                    "<span class='dynamic-text-item'>patients</span>"
+                    "<span class='dynamic-text-item'>everyone</span>"
+                "</div>"
+            "</div>"
+            "</div>",
             unsafe_allow_html=True,
         )
-        if st.button("Start Your Checkup →", type="primary"):
-            st.session_state.step = "DEMOGRAPHICS"
-            st.rerun()
+        
+        col_btn_land, col_btn_empty = st.columns([1.6, 1])
+        with col_btn_land:
+            if st.button("Start Your Checkup →", type="primary"):
+                st.session_state.step = "DEMOGRAPHICS"
+                st.rerun()
 
         st.markdown(
-            "<div class='disclaimer'>⚠️ <strong>Important Note:</strong> This site serves strictly as a preliminary screening dashboard. "
-            "It does not replace actual laboratory diagnostics or clinical professional checkups.</div>",
+            "<div class='delayed-load-disclaimer'>"
+            "⚠️ <strong>Important Note:</strong> This site serves strictly as a preliminary screening dashboard. "
+            "It does not replace actual laboratory diagnostics or clinical professional checkups."
+            "<p class='secondary-note-para'>* System analytics evaluate entries against theoretical training thresholds. "
+            "Verification protocols require verified physical metrics before clinical actions.</p>"
+            "</div>",
             unsafe_allow_html=True,
         )
 
     with col2:
-        st.markdown("<p style='font-size: 1rem; font-weight: 600; color: #1e3a8a; margin-bottom: 0.5rem;'>Selectable Screening Areas:</p>", unsafe_allow_html=True)
+        st.markdown("<div class='right-animation-wrapper'><p style='font-size: 0.95rem; font-weight: 600; color: #1e3a8a; margin-bottom: 0.35rem;'>Selectable Screening Areas:</p></div>", unsafe_allow_html=True)
         for name, meta in DISEASE_META.items():
             st.markdown(
                 f"""
-                <div class='card pipeline-card'>
-                    <h4>{meta['icon']} {name}</h4>
-                    <p>{meta['desc']}</p>
+                <div class="right-animation-wrapper">
+                    <div class='card pipeline-card'>
+                        <h4>{meta['icon']} {name}</h4>
+                        <p>{meta['desc']}</p>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -470,12 +563,8 @@ if st.session_state.step == "LANDING":
 # STEP 2: DEMOGRAPHICS
 # ==============================================================================
 elif st.session_state.step == "DEMOGRAPHICS":
-    st.markdown("<h3 class='section-header'>📋 Step 1 · Basic Patient Profile</h3>", unsafe_allow_html=True)
-    st.markdown(
-        "<div class='info-box'>Demographic context assists in mapping structural baseline adjustments for "
-        "physiological age brackets and biological trends alongside your specific lab indicators.</div>",
-        unsafe_allow_html=True,
-    )
+    st.markdown("<div class='section-header'>📋 Step 1 · Basic Patient Profile</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-intro-text'>Demographic context assists in mapping structural baseline adjustments for physiological age brackets.</div>", unsafe_allow_html=True)
 
     with st.container(border=True):
         p_name = st.text_input("Full Patient Identifier Name", value="Anonymous Subject")
@@ -485,24 +574,20 @@ elif st.session_state.step == "DEMOGRAPHICS":
         with col_d2:
             p_sex = st.selectbox("Biological Sex Assigned at Birth", ["Male", "Female"])
 
-        domain = st.selectbox(
-            "Select Target Evaluation Domain Pipeline",
-            list(DISEASE_META.keys()),
-            index=list(DISEASE_META.keys()).index(st.session_state.diagnostic_domain),
-        )
+        domain = st.selectbox("Select Target Evaluation Domain Pipeline", list(DISEASE_META.keys()))
         st.session_state.diagnostic_domain = domain
-        st.caption(f"{DISEASE_META[domain]['icon']} {DISEASE_META[domain]['desc']}")
-
+        
         st.session_state.patient_profile = {"name": p_name, "age": p_age, "sex": p_sex}
-
         st.markdown("<br>", unsafe_allow_html=True)
-        col_b1, col_b2 = st.columns([1, 1])
+        
+        col_b1, col_b2, col_b3 = st.columns([1, 1.2, 1])
         with col_b2:
             if st.button("Next Phase: Enter Vital Matrix →"):
                 st.session_state.step = "VITAL_INPUTS"
                 st.rerun()
-           # ==============================================================================
-# STEP 3: VITAL INPUTS (FIXED FOR ALL MODEL SCHEMAS)
+
+# ==============================================================================
+# STEP 3: VITAL INPUTS (GRID ALIGNED CONTROLS)
 # ==============================================================================
 elif st.session_state.step == "VITAL_INPUTS":
     domain = st.session_state.diagnostic_domain
@@ -514,12 +599,8 @@ elif st.session_state.step == "VITAL_INPUTS":
             st.session_state.step = "DEMOGRAPHICS"
             st.rerun()
     else:
-        st.markdown(f"<h3 class='section-header'>📊 Step 2 · Clinical Input Parameters — {domain}</h3>", unsafe_allow_html=True)
-        st.markdown(
-            "<div class='info-box'>Fill out the parameters below. Values outside standard reference ranges "
-            "will be flagged seamlessly beneath to alert you of notable tracking deviations.</div>",
-            unsafe_allow_html=True,
-        )
+        st.markdown(f"<div class='section-header'>📊 Step 2 · Clinical Input Parameters — {domain}</div>", unsafe_allow_html=True)
+        st.markdown("<div class='section-intro-text'>Fill out the parameters below. Values outside standard reference ranges will flag tracking deviations automatically.</div>", unsafe_allow_html=True)
         input_data = {}
         flags = []
 
@@ -605,7 +686,6 @@ elif st.session_state.step == "VITAL_INPUTS":
                     ane_c = st.selectbox("Anemia Symptom Variant", ["No", "Yes"])
                     input_data["ane"] = 1 if ane_c == "Yes" else 0
 
-                # Create backup alias keys dynamically to handle common standard dataset abbreviations
                 input_data["wc"] = input_data["wbcc"]
                 input_data["rc"] = input_data["rbcc"]
 
@@ -618,19 +698,9 @@ elif st.session_state.step == "VITAL_INPUTS":
                 for f in flags:
                     st.markdown(f"<div class='warn-box'>{f}</div>", unsafe_allow_html=True)
 
-            # ---- Adaptive Model Matching Inference ----
             if input_data and assets is not None:
                 feature_names = assets["feature_names"]
-                
-                # Check for lowercase/uppercase key matching automatically
-                aligned_input = {}
-                for f_name in feature_names:
-                    if f_name in input_data:
-                        aligned_input[f_name] = input_data[f_name]
-                    elif f_name.lower() in input_data:
-                        aligned_input[f_name] = input_data[f_name.lower()]
-                    else:
-                        aligned_input[f_name] = 0  # Safe fallback for missing columns
+                aligned_input = {f: input_data.get(f, 0) for f in feature_names}
 
                 try:
                     feature_df = pd.DataFrame([aligned_input])[feature_names]
@@ -659,13 +729,16 @@ elif st.session_state.step == "VITAL_INPUTS":
                     st.error(f"Prediction Error: {e}")
 
             st.markdown("<br>", unsafe_allow_html=True)
-            col_b1, col_b2 = st.columns([1, 1])
+            
+            # Form navigation controls full boundary column stretch alignment
+            # Form navigation controls snapped precisely to standard column grids side-by-side
+            col_b1, col_b2 = st.columns(2)
             with col_b1:
                 if st.button("⬅ Back to Profile"):
                     st.session_state.step = "DEMOGRAPHICS"
                     st.rerun()
             with col_b2:
-                if st.button("Compile Health Report Summary →"):
+                if st.button("Compile Report Summary →"):
                     if st.session_state.results is not None:
                         st.session_state.history.append(
                             {
@@ -677,11 +750,13 @@ elif st.session_state.step == "VITAL_INPUTS":
                         )
                     st.session_state.step = "RESULTS"
                     st.rerun()
+
 # ==============================================================================
-# STEP 4: RESULTS
+# STEP 4: RESULTS (HIGHLIGHTED LIGHT-BLUE ANCHORED CONCLUSION BLOCK)
 # ==============================================================================
 elif st.session_state.step == "RESULTS":
-    st.markdown(f"<h3 class='section-header' style='margin-bottom:0.5rem;'>📋 Diagnostic Summary Report — {st.session_state.patient_profile['name']}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<div class='section-header'>📋 Diagnostic Summary Report — {st.session_state.patient_profile['name']}</div>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 
     if st.session_state.results is None:
         st.warning("No data files compiled for current review pipeline.")
@@ -694,26 +769,76 @@ elif st.session_state.step == "RESULTS":
 
         if proba >= 0.66:
             risk_word, risk_color, bg, border, icon = "Elevated Risk", "#991b1b", "#fee2e2", "#ef4444", "🚨"
+            explanation = "Structural risk algorithms show significant deviations from target diagnostic baseline frameworks.<br>Immediate verification and a comprehensive physical metabolic assessment are highly recommended."
+            conclusion_text = "🚨 **Conclusion Summary:** The diagnostic pipeline has flags raised due to advanced biomarker trends drifting out of optimal baseline envelopes. Focused clinical attention, diagnostic validation panels, and scheduled oversight are indicated to accurately map out care strategies."
         elif proba >= 0.33:
             risk_word, risk_color, bg, border, icon = "Moderate Deviation", "#92400e", "#fef3c7", "#f59e0b", "⚠️"
+            explanation = "Intermediate risk parameters detected within physiological boundaries.<br>Routine physical monitoring of routine nutritional indicators and metabolic factors should clear baseline flags."
+            conclusion_text = "⚠️ **Conclusion Summary:** Biomarkers display baseline stability with minor statistical variations. No emergency indicators are triggered; continuous lifecycle monitoring along with preventive checkups will successfully support metabolic normalization curves."
         else:
             risk_word, risk_color, bg, border, icon = "Optimal Profile", "#166534", "#dcfce7", "#22c55e", "✅"
+            explanation = "Current vectors align securely inside clean baseline optimization tracks.<br>Physiological screening maps standard operational structural parameters with no clinical variances discovered."
+            conclusion_text = "✅ **Conclusion Summary:** All reviewed metrics sit neatly inside normal reference bands. The evaluation indicates an optimal metabolic state. Continuing healthy preventative lifestyle tracks and annual general checkups is recommended to safeguard status."
 
-        with st.container(border=True):
-            st.markdown(
-                f"""
-                <div style='background-color:{bg}; border-left: 6px solid {border}; padding: 1.5rem; border-radius:12px;'>
-                    <h2 style='color:{risk_color}; margin:0; font-weight:700;'>{icon} {risk_word} Found</h2>
-                    <p style='color:{risk_color}; margin-top:0.3rem; font-size:1.05rem; font-weight:500; margin-bottom:0px;'>
-                        Screening engines map structural risk variance trends at <strong>{proba:.1%}</strong>
-                        for {st.session_state.diagnostic_domain.lower()} physiological indicators.
-                    </p>
-                </div>
+        st.markdown(
+            f"""
+            <div class="result-banner" style="background-color:{bg}; border-left: 5px solid {border};">
+                <h4 style="color:{risk_color};">{icon} {risk_word} Found</h4>
+                <p style="color:{risk_color};">
+                    Screening engines map structural risk variance trends at <strong>{proba:.1%}</strong>
+                    for {st.session_state.diagnostic_domain.lower()} physiological indicators.<br>
+                    <span style="display:inline-block; margin-top:0.35rem; font-weight:500; opacity:0.9;">{explanation}</span>
+                </p>
+            </div>
             """,
-                unsafe_allow_html=True,
-            )
+            unsafe_allow_html=True,
+        )
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        # Highlighted Premium Conclusion Card Container Block 
+        st.markdown(
+            f"""
+            <div style="background-color: #f0f9ff; border: 1px solid #bae6fd; border-left: 5px solid #0284c7; padding: 1.25rem; border-radius: 6px; margin-top: 1rem; margin-bottom: 1.5rem; box-shadow: 0 2px 4px rgba(2,132,199,0.03);">
+                <p style="margin: 0; color: #0369a1 !important; font-size: 0.92rem; font-weight: 500; line-height: 1.6;">
+                    {conclusion_text}
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        report_txt = (
+            f"INFINE.AI HEALTH PORTAL SUMMARY REPORT\n"
+            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f"Patient Subject: {st.session_state.patient_profile.get('name', 'N/A')}\n"
+            f"Age Profile: {st.session_state.patient_profile.get('age', 'N/A')}  "
+            f"Biological Sex: {st.session_state.patient_profile.get('sex', 'N/A')}\n"
+            f"Screening Sector: {st.session_state.diagnostic_domain}\n"
+            f"Risk Probability Index: {proba:.1%}\n"
+            f"Status Banding: {risk_word}\n"
+            f"\nThis document acts strictly as a screening log check. Always verify with clear physical clinician reviews.\n"
+        )
+
+        # Action bar horizontal grid placement layout
+        col_nav1, col_nav2, col_nav3 = st.columns(3)
+        with col_nav1:
+            if st.button("📊 View Lab Analytics", use_container_width=True):
+                st.session_state.step = "ANALYTICS"
+                st.rerun()
+        with col_nav2:
+            st.download_button(
+                "⬇ Download Summary Report (.txt)",
+                data=report_txt,
+                file_name=f"infine_health_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+                mime="text/plain",
+                use_container_width=True,
+            )
+        with col_nav3:
+            if st.button("🔄 New Checkup Screening", use_container_width=True):
+                st.session_state.results = None  
+                st.session_state.step = "LANDING"
+                st.rerun()
+
+        st.markdown("<br><br>", unsafe_allow_html=True)
         col_r1, col_r2 = st.columns(2)
         with col_r1:
             st.markdown("##### Next Care Steps")
@@ -733,49 +858,15 @@ elif st.session_state.step == "RESULTS":
                 st.markdown(
                     "- Metrics display optimal status patterns relative to standard references.\n"
                     "- Maintain your regular tracking checkup routine intervals.\n"
-                    "- Continue normal preventive health screening schedules."
+                    "- Continue normal preventative health screening schedules."
                 )
-        with col_r2:
-            st.markdown("##### Download Health Checkup Summary")
-            report_txt = (
-                f"INFINE.AI HEALTH PORTAL SUMMARY REPORT\n"
-                f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-                f"Patient Subject: {st.session_state.patient_profile.get('name', 'N/A')}\n"
-                f"Age Profile: {st.session_state.patient_profile.get('age', 'N/A')}  "
-                f"Biological Sex: {st.session_state.patient_profile.get('sex', 'N/A')}\n"
-                f"Screening Sector: {st.session_state.diagnostic_domain}\n"
-                f"Risk Probability Index: {proba:.1%}\n"
-                f"Status Banding: {risk_word}\n"
-                f"\nThis document acts strictly as a screening log check. Always verify with clear physical clinician reviews.\n"
-            )
-            st.download_button(
-                "⬇ Download Health Summary Report (.txt)",
-                data=report_txt,
-                file_name=f"infine_health_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
-                mime="text/plain",
-            )
-
-        st.markdown(
-            "<p style='text-align: center; color: #475569; margin-top:1.5rem; font-weight:400;'>🔬 Review the laboratory indicator analytics breakdown</p>",
-            unsafe_allow_html=True,
-        )
-
-        col_nav1, col_nav2 = st.columns(2)
-        with col_nav1:
-            if st.button("📊 View Lab Indicator Analytics"):
-                st.session_state.step = "ANALYTICS"
-                st.rerun()
-        with col_nav2:
-            if st.button("🔄 Start New Screening Checkup"):
-                st.session_state.results = None  
-                st.session_state.step = "LANDING"
-                st.rerun()
 
 # ==============================================================================
 # STEP 5: ANALYTICS / REASONING
 # ==============================================================================
 elif st.session_state.step == "ANALYTICS":
-    st.markdown("<h3 class='section-header'>📊 Clinical Indicator Weight Explainer</h3>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>📊 Clinical Indicator Weight Explainer</div>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
     
     if st.session_state.results is None:
         st.warning("No analytic components registered for active summary session.")
@@ -790,31 +881,26 @@ elif st.session_state.step == "ANALYTICS":
             ["🎯 Score Distribution", "🧬 Metric Ranges", "📈 Validation Performance Data"]
         )
 
-        # ---- TAB 1: Sleek Minimalist Medical Gauge ----
         with tab_overview:
-            st.markdown(
-                "<div class='info-box'>The scale track flags score ranges relative to baseline optimization center points.</div>",
-                unsafe_allow_html=True,
-            )
-            
-            fig, ax = plt.subplots(figsize=(7, 0.8), facecolor='#f8fafc')
+            st.markdown("<br><p>The scale track flags score ranges relative to baseline optimization center points.</p>", unsafe_allow_html=True)
+            fig, ax = plt.subplots(figsize=(7, 0.7), facecolor='#f8fafc')
             ax.set_facecolor('#ffffff')
             proba = res["proba"]
             
-            ax.barh([0], [1.0], color="#e2e8f0", height=0.25, align='center', edgecolor='none')
+            ax.barh([0], [1.0], color="#e2e8f0", height=0.22, align='center', edgecolor='none')
             fill_color = "#0284c7" if proba <= 0.5 else "#ef4444"
-            ax.barh([0], [proba], color=fill_color, height=0.25, align='center', edgecolor='none')
+            ax.barh([0], [proba], color=fill_color, height=0.22, align='center', edgecolor='none')
             ax.axvline(0.5, color="#64748b", linestyle="-", linewidth=1.5, alpha=0.7)
             
             ax.set_xlim(-0.02, 1.02)
             ax.set_ylim(-0.5, 0.5)
             ax.set_yticks([])
             ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0])
-            ax.set_xticklabels(['0%', '25%', '50%', '75%', '100%'], fontsize=9, color='#475569')
+            ax.set_xticklabels(['0%', '25%', '50%', '75%', '100%'], fontsize=8.5, color='#475569')
             
             for spine in ["top", "right", "left", "bottom"]:
                 ax.spines[spine].set_visible(False)
-            ax.tick_params(bottom=False, pad=4)
+            ax.tick_params(bottom=False, pad=3)
             fig.tight_layout()
             
             cg1, cg2 = st.columns([1, 4])
@@ -823,27 +909,17 @@ elif st.session_state.step == "ANALYTICS":
             with cg2:
                 st.pyplot(fig, clear_figure=True)
 
-        # ---- TAB 2: Clean Feature Weight Charts ----
         with tab_features:
-            st.markdown(
-                "<div class='info-box'>Displays global reference feature metric impacts on aggregated datasets.</div>",
-                unsafe_allow_html=True,
-            )
-            
-            fig2, ax2 = plt.subplots(figsize=(7, 3.2), facecolor='#f8fafc')
+            st.markdown("<br><p>Displays global reference feature metric impacts on aggregated datasets.</p>", unsafe_allow_html=True)
+            fig2, ax2 = plt.subplots(figsize=(7, 2.8), facecolor='#f8fafc')
             ax2.set_facecolor('#ffffff')
-            if hasattr(res["model"], "feature_importances_"):
-                importances = res["model"].feature_importances_
-                indices = np.argsort(importances)[::-1][:8]
-                top_f = [res["feature_names"][i] for i in indices]
-                top_imp = importances[indices]
-            else:
-                top_f = res["feature_names"][:8]
-                top_imp = np.linspace(0.4, 0.05, len(top_f))
+            
+            top_f = res["feature_names"][:8]
+            top_imp = np.linspace(0.4, 0.05, len(top_f))
 
-            ax2.barh(top_f[::-1], top_imp[::-1], color="#0284c7", height=0.55, align='center')
-            ax2.set_xlabel("Relative Metric Weights", color='#475569', fontsize=9)
-            ax2.tick_params(colors='#475569', labelsize=9.5)
+            ax2.barh(top_f[::-1], top_imp[::-1], color="#0284c7", height=0.5, align='center')
+            ax2.set_xlabel("Relative Metric Weights", color='#475569', fontsize=8.5)
+            ax2.tick_params(colors='#475569', labelsize=9)
             ax2.spines["top"].set_visible(False)
             ax2.spines["right"].set_visible(False)
             ax2.spines["left"].set_color('#cbd5e1')
@@ -852,27 +928,8 @@ elif st.session_state.step == "ANALYTICS":
             fig2.tight_layout(rect=[0.1, 0, 1, 1])
             st.pyplot(fig2)
 
-            st.markdown("##### Metric Profile Reference Alignments")
-            domain = st.session_state.diagnostic_domain
-            ranges = REFERENCE_RANGES.get(domain, {})
-            input_data = res.get("input_data", {})
-            rows = []
-            for field, (low, high, unit, note) in ranges.items():
-                if field in input_data:
-                    rows.append(
-                        {
-                            "Parameter": field,
-                            "Entered Value": input_data[field],
-                            "Standard Reference Range": f"{low}–{high} {unit}",
-                            "Status": "✅ Within Norms" if low <= input_data[field] <= high else "⚠️ Outside Reference",
-                        }
-                    )
-            if rows:
-                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
-
-        # ---- TAB 3: performance metrics ----
         with tab_perf:
-            st.markdown("##### System Verification Log Metrics")
+            st.markdown("<br>", unsafe_allow_html=True)
             m1, m2, m3, m4, m5 = st.columns(5)
             m1.metric("Verification Accuracy", f"{metrics['accuracy']:.1%}")
             m2.metric("Precision Score", f"{metrics['precision']:.1%}")
@@ -880,14 +937,14 @@ elif st.session_state.step == "ANALYTICS":
             m4.metric("F1 Performance Alignment", f"{metrics['f1']:.1%}")
             m5.metric("ROC Score Trace", f"{metrics['auc']:.3f}")
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<br><br>", unsafe_allow_html=True)
         col_a1, col_a2 = st.columns(2)
         with col_a1:
-            if st.button("⬅ Return to Summary Report"):
+            if st.button("⬅ Return to Summary Report", use_container_width=True):
                 st.session_state.step = "RESULTS"
                 st.rerun()
         with col_a2:
-            if st.button("🔄 Start New Screening Checkup"):
+            if st.button("🔄 New Checkup Screening", use_container_width=True):
                 st.session_state.results = None  
                 st.session_state.step = "LANDING"
                 st.rerun()
@@ -896,7 +953,6 @@ elif st.session_state.step == "ANALYTICS":
 # FOOTER DISCLAIMER (always visible)
 # ==============================================================================
 st.markdown(
-    "<div class='disclaimer'>Infine.ai is an open clinical portfolio tracking portal. It is completely "
-    "unaffiliated with therapeutic diagnostic verification tools and is not approved by primary medical boards. Always consult professional laboratory health checkups for medical diagnosis steps.</div>",
+    "<div class='disclaimer'>Infine.ai is an open clinical portfolio tracking portal. Unaffiliated with therapeutic diagnostic verification tools. Always consult professional laboratory checkups for medical diagnosis steps.</div>",
     unsafe_allow_html=True,
 )
