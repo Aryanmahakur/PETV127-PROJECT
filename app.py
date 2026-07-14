@@ -24,7 +24,7 @@ st.set_page_config(
     page_title="Infine.ai Health Suite",
     page_icon="🩺",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 # ==============================================================================
@@ -391,6 +391,174 @@ st.markdown(
             margin-bottom: 0.35rem !important;
             padding-bottom: 0px !important;
         }
+        /* =====================================================
+   RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 1024px){
+
+    .hero-title{
+        font-size:1.7rem !important;
+        text-align:center;
+    }
+
+    .hero-subtitle{
+        justify-content:center;
+        text-align:center;
+    }
+
+    .section-header{
+        font-size:1.2rem !important;
+    }
+
+    .nav-container{
+        flex-direction:column;
+        gap:12px;
+        padding:1rem;
+    }
+
+    .nav-tracker{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .card{
+        padding:1rem !important;
+    }
+
+    .pipeline-card h4{
+        font-size:1rem !important;
+    }
+
+    .delayed-load-disclaimer{
+        margin-top:3rem !important;
+    }
+
+    .attention-banner{
+        padding:1rem;
+    }
+}
+
+
+@media (max-width:768px){
+
+    html{
+        font-size:15px;
+    }
+
+    .hero-title{
+        font-size:1.5rem !important;
+        line-height:1.4;
+    }
+
+    .hero-subtitle{
+        font-size:0.95rem !important;
+    }
+
+    .badge{
+        font-size:.65rem;
+    }
+
+    .section-header{
+        font-size:1.1rem !important;
+    }
+
+    .section-intro-text{
+        font-size:.9rem !important;
+    }
+
+    .nav-logo{
+        font-size:1rem;
+    }
+
+    .nav-step{
+        font-size:.75rem;
+    }
+
+    .card{
+        padding:.9rem !important;
+    }
+
+    .pipeline-card h4{
+        font-size:.95rem !important;
+    }
+
+    .pipeline-card p{
+        font-size:.8rem !important;
+    }
+
+    div.stButton>button{
+        padding:.8rem !important;
+        font-size:.9rem !important;
+    }
+
+    div[data-testid="stDownloadButton"]>button{
+        padding:.8rem !important;
+    }
+
+    .delayed-load-disclaimer{
+        margin-top:2rem !important;
+    }
+
+    .result-banner{
+        padding:1rem;
+    }
+
+}
+
+
+@media (max-width:480px){
+
+    html{
+        font-size:14px;
+    }
+
+    .hero-title{
+        font-size:1.3rem !important;
+    }
+
+    .hero-subtitle{
+        font-size:.85rem !important;
+    }
+
+    .section-header{
+        font-size:1rem !important;
+    }
+
+    .nav-container{
+        padding:.8rem;
+    }
+
+    .nav-tracker{
+        gap:.2rem;
+    }
+
+    .nav-step{
+        padding:.2rem .3rem;
+        font-size:.7rem;
+    }
+
+    .card{
+        padding:.8rem !important;
+    }
+
+    .pipeline-card p{
+        font-size:.75rem !important;
+    }
+
+    .attention-banner p{
+        font-size:.85rem !important;
+    }
+
+    .warn-box{
+        font-size:.75rem;
+    }
+
+    .disclaimer{
+        font-size:.7rem;
+    }
+
+}
     </style>
     """,
     unsafe_allow_html=True,
@@ -448,6 +616,7 @@ DISEASE_META = {
         "icon": "🫘",
         "desc": "Cross-examine renal blood panels and chemistry values to flag early signs of kidney function decline.",
     },
+    
 }
 
 @st.cache_resource
