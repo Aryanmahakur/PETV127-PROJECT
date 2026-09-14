@@ -66,14 +66,12 @@ def train_disease_model(name, df, target_column):
     X_train_scaled = scaler.fit_transform(X_train_imputed)
     X_test_scaled = scaler.transform(X_test_imputed)
 
-    # 7. Model Assembly (Random Forest optimized for medical imbalances)
     model = RandomForestClassifier(
         n_estimators=100, random_state=42, class_weight="balanced"
     )
     model.fit(X_train_scaled, y_train)
-
-    # 8. Evaluation Performance Check
     predictions = model.predict(X_test_scaled)
+    
     recall = recall_score(y_test, predictions)
     print(f"🎯 {name} Model Sensitivity/Recall: {recall:.2%}")
 

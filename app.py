@@ -1,6 +1,5 @@
 """
 Infine.ai Health Suite
-------------------------
 A clinical screening demo application.
 
 IMPORTANT: This tool is a technology demonstration only. It is NOT a medical
@@ -9,17 +8,13 @@ licensed clinician before any care decision is made.
 """
 
 import os
-from datetime import datetime
-
+from datetime import datetimef
 import joblib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import streamlit as st
 
-# ==============================================================================
-# 0. PAGE CONFIG
-# ==============================================================================
 st.set_page_config(
     page_title="Infine.ai Health Suite",
     page_icon="🩺",
@@ -27,9 +22,6 @@ st.set_page_config(
     initial_sidebar_state="auto",
 )
 
-# ==============================================================================
-# 1. STATE INITIALIZATION
-# ==============================================================================
 DEFAULTS = {
     "step": "LANDING",
     "patient_profile": {},
@@ -48,9 +40,7 @@ NAV_STEPS = [
     ("RESULTS", "Health Report"),
     ("ANALYTICS", "Clinical Breakdown")
 ]
-# ==============================================================================
-# 2. THEME / STYLING & ADVANCED ANIMATIONS
-# ==============================================================================
+
 st.markdown(
     """
     <style>
