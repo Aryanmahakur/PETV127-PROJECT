@@ -8,7 +8,7 @@ licensed clinician before any care decision is made.
 """
 
 import os
-from datetime import datetimefddgi
+from datetime import datetime
 import joblib
 import matplotlib.pyplot as plt
 import numpy as np
